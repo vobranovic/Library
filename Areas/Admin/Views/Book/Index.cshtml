@@ -1,0 +1,82 @@
+﻿@model List<Book>
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1>Book Search</h1>
+
+<a asp-action="Index" class="btn btn-warning ml-3" asp-route-searchFor="All">List All Books</a> <a asp-action="Create" class="btn btn-success mb-10">Create New Book</a>
+<hr />
+@if (Model == null)
+{
+    <div class="row">
+        <div class="col-md-5">
+            <form asp-action="Index">
+                <div class="form-group">                    
+                    <input type="text" class="form-control" name="searchText" placeholder="What to search for?">
+                </div>
+                <div class="form-group">
+                    <label for="searchFor">Search by</label>
+                    <select class="form-control" name="searchFor">
+                        <option value="Book">Book</option>
+                        <option value="Author">Author</option>
+                        <option value="Publisher">Publisher</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary mt-3" value="Search" />
+                </div>
+             </form>
+         </div>
+     </div>
+}
+
+
+else if (Model.Count == 0)
+{
+    <p class="text text-center">We did not find any books with the given filter</p>
+    <a asp-action="Index" class="btn btn-secondary">Back To Search</a>
+
+}
+
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Year</th>
+                <th>Stock</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@foreach (var item in book.BookAuthor)
+                        {
+                            @item.AuthorName<br/>
+                        }</td>
+                    <td>@book.Publisher</td>
+                    <td>@book.Year.Year</td>
+                    <td>@book.Stock</td>
+                    <td><a asp-action="Edit" class="btn btn-primary" asp-route-Id="@book.Id">Edit</a> <a asp-action="Delete" class="btn btn-danger ml-3" asp-route-Id="@book.Id">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-action="Index" class="btn btn-secondary">Back To Search</a>
+    
+}
+
+
+
+
+

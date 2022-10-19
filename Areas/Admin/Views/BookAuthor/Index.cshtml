@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Library.Models.BookAuthor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Authors</h1>
+
+<p>
+    <a asp-action="Add" class="btn btn-success" asp-route-Id="@ViewBag.BookId">Add Authors</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Author</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.AuthorName
+            </td>
+            <td>
+                <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Edit" asp-controller="Book" class="btn btn-secondary" asp-route-Id="@ViewBag.BookId">Back to Book</a>
+</div>
