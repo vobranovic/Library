@@ -3,6 +3,7 @@ using Library.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Library.Areas.Admin.Controllers
@@ -21,6 +22,10 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var borrows = _dbContext.Borrows.ToList();
+            foreach (var borrow in borrows)
+            {
+                borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+            }
             return View(borrows);
         }
 
@@ -49,6 +54,9 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult Edit(int id)
         {
             var borrow = _dbContext.Borrows.Find(id);
+            var bookBorrow = GetBorrowedBooks(id);
+
+            ViewBag.Books = bookBorrow;
             ViewBag.Users = _dbContext.Users.ToList().Select(u => new SelectListItem() { Text = u.UserName, Value = u.Id.ToString() });
             return View(borrow);
         }
@@ -71,8 +79,10 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult EditBooks(int id)
         {
             var borrow = _dbContext.Borrows.Find(id);
+            var bookBorrow = GetBorrowedBooks(id);
+
+            ViewBag.Books = bookBorrow;
             ViewBag.BorrowId = borrow.Id;
-            ViewBag.Books = borrow.Books;
 
             return View();
         }
@@ -85,9 +95,12 @@ namespace Library.Areas.Admin.Controllers
                 var books = _dbContext.Books.Where(b => b.Title.Contains(searchText.Trim())).OrderBy(b => b.Title).ToList();
                 FillBooksDetails(books);
 
-                var borrow = _dbContext.Borrows.Find(id);
+                var borrow = _dbContext.Borrows.FirstOrDefault(b => b.Id == id);
+                var bookBorrow = GetBorrowedBooks(id);
+
+                ViewBag.Books = bookBorrow;
                 ViewBag.BorrowId = borrow.Id;
-                ViewBag.Books = borrow.Books;
+                
 
                 return View(books);
             }
@@ -109,8 +122,11 @@ namespace Library.Areas.Admin.Controllers
                 FillBooksDetails(books);
 
                 var borrow = _dbContext.Borrows.Find(id);
+                var bookBorrow = GetBorrowedBooks(id);
+
+                ViewBag.Books = bookBorrow;
                 ViewBag.BorrowId = borrow.Id;
-                ViewBag.Books = borrow.Books;
+                
 
                 return View(books);
             }
@@ -126,38 +142,53 @@ namespace Library.Areas.Admin.Controllers
                 FillBooksDetails(books);
 
                 var borrow = _dbContext.Borrows.Find(id);
+                var bookBorrow = GetBorrowedBooks(id);
+
+                ViewBag.Books = bookBorrow;
                 ViewBag.BorrowId = borrow.Id;
-                ViewBag.Books = borrow.Books;
+                
 
                 return View(books);
             }
+            else
+            {
+                var borrow = _dbContext.Borrows.Find(id);
+                var bookBorrow = GetBorrowedBooks(id);
 
-            return View();
+                ViewBag.Books = bookBorrow;
+                ViewBag.BorrowId = borrow.Id;
+
+                return View();
+            }
         }
 
         public IActionResult AddToBorrowList(int bookId, int id)
         {
-            var borrow = _dbContext.Borrows.Find(id);
-            borrow.Books.Add(_dbContext.Books.Find(bookId));
+            BookBorrow bb = new BookBorrow() {  BookId = bookId, BorrowId = id };
+            _dbContext.BookBorrow.Add(bb);
+            _dbContext.SaveChanges();
 
-            ViewBag.BorrowId = borrow.Id;
-            ViewBag.Books = borrow.Books;
+            var bookBorrow = GetBorrowedBooks(id);
+
+            ViewBag.Books = bookBorrow;
+            ViewBag.BorrowId = id;
 
             return RedirectToAction(nameof(EditBooks), new { id = id });
         }
 
         public IActionResult RemoveFromBorrowList(int bookId, int id)
         {
-            var borrow = _dbContext.Borrows.Find(id);
-            borrow.Books.Remove(_dbContext.Books.Find(bookId));
+            var bb = _dbContext.BookBorrow.FirstOrDefault(bb => bb.BookId == bookId && bb.BorrowId == id);
+            _dbContext.BookBorrow.Remove(bb);
+            _dbContext.SaveChanges();
 
-            ViewBag.BorrowId = borrow.Id;
-            ViewBag.Books = borrow.Books;
+            var bookBorrow = GetBorrowedBooks(id);
+
+            ViewBag.Books = bookBorrow;
+            ViewBag.BorrowId = id;
 
             return RedirectToAction(nameof(EditBooks), new { id = id });
         }
-
-
 
         private void FillBooksDetails(Book book)
         {
@@ -179,5 +210,17 @@ namespace Library.Areas.Admin.Controllers
                 book.Publisher = _dbContext.Publishers.FirstOrDefault(p => p.Id == book.PublisherId).Name;
             }
         }
+
+        private List<BookBorrow> GetBorrowedBooks(int id)
+        {
+            return _dbContext.BookBorrow.Where(bb => bb.BorrowId == id).Select(bb => new BookBorrow()
+            {
+                Id = bb.Id,
+                BookId = bb.BookId,
+                BorrowId = bb.BorrowId,
+                BookTitle = _dbContext.Books.FirstOrDefault(b => b.Id == bb.BookId).Title
+            }).ToList();
+        }
+
     }
 }

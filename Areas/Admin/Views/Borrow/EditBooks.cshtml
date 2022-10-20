@@ -25,45 +25,41 @@
             </div>
         </form>
     </div>
-    <div class="col-md-6">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.Books)
-                {
+    @if (ViewBag.Books != null)
+    {
+        <div class="col-md-6">
+            <table class="table table-hover">
+                <thead>
                     <tr>
-                        <td>@item.Title</td>
-                        <td>
-                            @foreach (var author in item.BookAuthor)
-                            {
-                                @item.AuthorName
-                                <br />
-                            }
-                        </td>
-                        <td><a asp-action="RemoveFromBorrowList" class="btn btn-danger">asp-route-bookId="@item.Id" asp-route-Id="@ViewBag.BorrowId"</a></td>
+                        <th>Title</th>
+                        <th></th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.Books)
+                    {
+                        <tr>
+                            <td>@item.BookTitle</td>
+                            <td><a asp-action="RemoveFromBorrowList" class="btn btn-danger" asp-route-bookId="@item.BookId" asp-route-Id="@item.BorrowId">Remove</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    
 </div>
 
 @if (Model == null)
 {
     <p>Please use search to find books and add them to the list</p>
-}
+    <a asp-action="Edit" class="btn btn-secondary" asp-route-Id="@ViewBag.BorrowId">Back</a>
+   }
 
 
 else if (Model.Count == 0)
 {
     <p class="text text-center">We did not find any books with the given filter</p>
-    <a asp-action="EditBooks" class="btn btn-secondary">Search Again</a>
 }
 
 else

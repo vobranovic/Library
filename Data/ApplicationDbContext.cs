@@ -15,6 +15,7 @@ namespace Library.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<BookAuthor> BookAuthor { get; set; }
         public DbSet<Borrow> Borrows { get; set; }
+        public DbSet<BookBorrow> BookBorrow { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
 
     }

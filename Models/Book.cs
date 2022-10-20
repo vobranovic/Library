@@ -16,7 +16,9 @@ namespace Library.Models
         public string? Publisher { get; set; }
 
         public int PublisherId { get; set; }
-        public int? BorrowId { get; set; }
+
+        [ForeignKey("BookId")]
+        public List<BookBorrow> BookBorrow { get; set; } = new List<BookBorrow>();
 
         [ForeignKey("BookId")]
         public List<BookAuthor> BookAuthor { get; set; } = new List<BookAuthor>();
