@@ -1,0 +1,99 @@
+﻿@model List<Book>
+@{
+    ViewData["Title"] = "Edit Books";
+}
+
+<h1>Add/Remove Books</h1>
+
+<div class="row" >
+    <div class="col-md-6">
+        <form asp-action="EditBooks">
+            <input type="hidden" asp-route-Id="@ViewBag.BorrowId" />
+            <div class="form-group">
+                <input type="text" class="form-control" name="searchText" placeholder="What to search for?">
+            </div>
+            <div class="form-group">
+                <label for="searchFor">Search by</label>
+                <select class="form-control" name="searchFor">
+                    <option value="Book">Book</option>
+                    <option value="Author">Author</option>
+                    <option value="Publisher">Publisher</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary btn-lg mt-3" value="Search" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.Books)
+                {
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>
+                            @foreach (var author in item.BookAuthor)
+                            {
+                                @item.AuthorName
+                                <br />
+                            }
+                        </td>
+                        <td><a asp-action="RemoveFromBorrowList" class="btn btn-danger">asp-route-bookId="@item.Id" asp-route-Id="@ViewBag.BorrowId"</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@if (Model == null)
+{
+    <p>Please use search to find books and add them to the list</p>
+}
+
+
+else if (Model.Count == 0)
+{
+    <p class="text text-center">We did not find any books with the given filter</p>
+    <a asp-action="EditBooks" class="btn btn-secondary">Search Again</a>
+}
+
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publisher</th>
+                <th>Year</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Id</td>
+                    <td>@book.Title</td>
+                    <td>@foreach (var item in book.BookAuthor)
+                        {
+                            @item.AuthorName<br/>
+                        }</td>
+                    <td>@book.Publisher</td>
+                    <td>@book.Year.Year</td>
+                    <td><a asp-action="AddToBorrowList" class="btn btn-success" asp-route-bookId="@book.Id" asp-route-Id="@ViewBag.BorrowId">Add</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

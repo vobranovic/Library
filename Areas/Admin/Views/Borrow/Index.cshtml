@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Library.Models.Borrow>
+
+@{
+    ViewData["Title"] = "Borrow List";
+}
+
+<h1>Borrow List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Borrow Books</a>
+</p>
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateBorrowed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExpectedReturnDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateReturned)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateBorrowed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateReturned)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
