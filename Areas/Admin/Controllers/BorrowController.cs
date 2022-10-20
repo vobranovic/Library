@@ -76,6 +76,28 @@ namespace Library.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var borrow = _dbContext.Borrows.Find(id);
+            borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+
+            var bookBorrow = GetBorrowedBooks(id);
+            ViewBag.Books = bookBorrow;
+
+            return View(borrow);
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmDelete(int id)
+        {
+            var borrow = _dbContext.Borrows.Find(id);
+            _dbContext.Borrows.Remove(borrow);
+            _dbContext.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
         public IActionResult EditBooks(int id)
         {
             var borrow = _dbContext.Borrows.Find(id);

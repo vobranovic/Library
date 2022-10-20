@@ -50,6 +50,7 @@ else
                 <th>Publisher</th>
                 <th>Year</th>
                 <th>Stock</th>
+                <th>Available</th>
                 <th></th>
             </tr>
         </thead>
@@ -66,6 +67,7 @@ else
                     <td>@book.Publisher</td>
                     <td>@book.Year.Year</td>
                     <td>@book.Stock</td>
+                    <td>@book.Available</td>
                     <td><a asp-action="Edit" class="btn btn-primary" asp-route-Id="@book.Id">Edit</a> <a asp-action="Delete" class="btn btn-danger ml-3" asp-route-Id="@book.Id">Delete</a></td>
                 </tr>
             }

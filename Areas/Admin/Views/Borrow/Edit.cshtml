@@ -39,28 +39,37 @@
             </div>
         </form>
         <div>
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>
 
 <h3>Currently Borrowed Books</h3>
 <hr />
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Title</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in ViewBag.Books)
-        {
+
+@if (ViewBag.Books.Count > 0)
+{
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>@item.BookTitle</td>
+                <th>Title</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Books)
+            {
+                <tr>
+                    <td>@item.BookTitle</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Currently no books are borrowed!</p>
+}
+
 
 
 

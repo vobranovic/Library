@@ -22,6 +22,7 @@ namespace Library.Areas.Admin.Controllers
             if (searchFor == "Book" && searchText != "" && searchText != null)
                 {
                     var books = _dbContext.Books.Where(b => b.Title.Contains(searchText.Trim())).OrderBy(b => b.Title).ToList();
+                    CountAvailableBooks(books);
                     FillBooksDetails(books);
                 
                     return View(books);
@@ -40,6 +41,7 @@ namespace Library.Areas.Admin.Controllers
                 {
                     books.AddRange(_dbContext.Books.Where(b => b.Id == item.BookId).ToList());
                 }
+                CountAvailableBooks(books);
                 FillBooksDetails(books);
 
                 return View(books);
@@ -53,6 +55,7 @@ namespace Library.Areas.Admin.Controllers
                 {
                     books.AddRange(_dbContext.Books.Where(b => b.PublisherId == publisher.Id).ToList());
                 }
+                CountAvailableBooks(books);
                 FillBooksDetails(books);
                 return View(books);
             }
@@ -60,6 +63,7 @@ namespace Library.Areas.Admin.Controllers
             else if (searchFor == "All")
             {
                 var books = _dbContext.Books.OrderBy(b => b.Title).ToList();
+                CountAvailableBooks(books);
                 FillBooksDetails(books);
                 return View(books);
             }
@@ -129,6 +133,15 @@ namespace Library.Areas.Admin.Controllers
             _dbContext.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        private void CountAvailableBooks(List<Book> books)
+        {
+            foreach (var book in books)
+            {
+                book.Available = book.Stock - _dbContext.BookBorrow.Count(b => b.BookId == book.Id);
+            }
         }
 
         private void FillBooksDetails(Book book)

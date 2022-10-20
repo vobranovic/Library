@@ -8,8 +8,10 @@ namespace Library.Models
         public int Id { get; set; }
         [Required]
         [StringLength(100)]
-        public string Title { get; set; }        
+        public string Title { get; set; }
+        [Required]
         public int Stock { get; set; }
+        public int Available { get; set; }
         [Required]
         public DateTime Year { get; set; }
         [NotMapped]
