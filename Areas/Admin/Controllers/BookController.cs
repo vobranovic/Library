@@ -88,7 +88,7 @@ namespace Library.Areas.Admin.Controllers
                 _dbContext.Books.Add(book);
                 _dbContext.SaveChanges();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit), new { id = book.Id});
             }
 
             return View(book);

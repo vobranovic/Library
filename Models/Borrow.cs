@@ -9,9 +9,12 @@ namespace Library.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Date Borrowed")]
         public DateTime DateBorrowed { get; set; }
         [Required]
+        [Display(Name = "Expected Return Date")]
         public DateTime ExpectedReturnDate { get; set; }
+        [Display(Name = "Date Returned")]
         public DateTime? DateReturned { get; set; }
         [NotMapped]
         [Display(Name = "User Name")]

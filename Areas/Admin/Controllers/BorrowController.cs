@@ -24,7 +24,14 @@ namespace Library.Areas.Admin.Controllers
             var borrows = _dbContext.Borrows.ToList();
             foreach (var borrow in borrows)
             {
-                borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+                if (_dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId) == null)
+                {
+                    borrow.UserName = "Not Found!";
+                }
+                else
+                {
+                    borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+                }
             }
             return View(borrows);
         }
@@ -79,7 +86,14 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult Delete(int id)
         {
             var borrow = _dbContext.Borrows.Find(id);
-            borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+            if (_dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId) == null)
+            {
+                borrow.UserName = "Not Found!";
+            }
+            else
+            {
+                borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
+            }
 
             var bookBorrow = GetBorrowedBooks(id);
             ViewBag.Books = bookBorrow;

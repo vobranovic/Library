@@ -1,0 +1,49 @@
+﻿@model ApplicationUser
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h1>Edit User</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-5>">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="OIB" class="control-label"></label>
+                <input asp-for="OIB" class="form-control" />
+            </div>
+            <div class="form-group">
+            <button type="submit" class="btn btn-success mt-3 mb-3">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary">Back to User List</a>
+
