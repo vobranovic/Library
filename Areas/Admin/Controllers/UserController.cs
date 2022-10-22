@@ -71,6 +71,14 @@ namespace Library.Areas.Admin.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             ApplicationUser user = await _userManager.FindByIdAsync(id);
+            ViewBag.Borrows = _dbContext.Borrows.Where(b => b.UserId == user.Id).ToList();
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmDelete(string id)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
 
             if (user != null)
             {
@@ -86,12 +94,11 @@ namespace Library.Areas.Admin.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "User nout found.");
+                ModelState.AddModelError("", "User not found.");
             }
 
             return RedirectToAction(nameof(Index));
         }
-
 
         private void Errors(IdentityResult identityResult)
         {
