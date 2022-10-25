@@ -9,6 +9,9 @@
 <p>
     <a asp-action="Create" class="btn btn-success">Create New Author</a>
 </p>
+
+<input class="form-control" id="searchInput" type="text" placeholder="Search..">
+<br>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -21,7 +24,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="resultTable">
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -38,3 +41,17 @@
 }
     </tbody>
 </table>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#resultTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

@@ -6,6 +6,9 @@
 <h1>Users</h1>
 <hr />
 
+<input class="form-control" id="searchInput" type="text" placeholder="Search..">
+<br>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -16,7 +19,7 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="resultTable">
         @foreach (var item in Model)
         {
             <tr>
@@ -30,3 +33,16 @@
     </tbody>
 </table>
 
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#resultTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

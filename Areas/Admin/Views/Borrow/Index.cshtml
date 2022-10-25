@@ -11,6 +11,9 @@
 </p>
 <hr />
 
+<input class="form-control" id="searchInput" type="text" placeholder="Search..">
+<br>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -26,24 +29,33 @@
             <th>
                 @Html.DisplayNameFor(model => model.DateReturned)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BooksBorrowed)
+            </th>
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="resultTable">
 @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateBorrowed)
+                @item.DateBorrowed.ToShortDateString()
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
+                @item.ExpectedReturnDate.ToShortDateString()
             </td>
             <td>
-                    @Html.DisplayFor(modelItem => item.DateReturned)
+                    @if (@item.DateReturned.HasValue)
+                    {
+                        @item.DateReturned.Value.ToShortDateString()
+                    }
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BooksBorrowed)
+                </td>
             <td>
                 <a asp-action="Edit" class="btn btn-primary" asp-route-id="@item.Id">Edit</a>
                 <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id">Delete</a>
@@ -52,3 +64,17 @@
 }
     </tbody>
 </table>
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $("#searchInput").on("keyup", function () {
+                var value = $(this).val().toLowerCase();
+                $("#resultTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+}

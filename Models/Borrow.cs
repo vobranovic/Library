@@ -1,4 +1,5 @@
 ﻿using Microsoft.Build.Framework;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
@@ -16,9 +17,14 @@ namespace Library.Models
         public DateTime ExpectedReturnDate { get; set; }
         [Display(Name = "Date Returned")]
         public DateTime? DateReturned { get; set; }
+
         [NotMapped]
         [Display(Name = "User Name")]
         public string? UserName { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Books Borrowed")]
+        public int BooksBorrowed { get; set; }
 
 
         public string UserId { get; set; }

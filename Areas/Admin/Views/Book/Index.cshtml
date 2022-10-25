@@ -44,7 +44,6 @@ else
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Title</th>
                 <th>Author</th>
                 <th>Publisher</th>
@@ -58,7 +57,6 @@ else
             @foreach (var book in Model)
             {
                 <tr>
-                    <td>@book.Id</td>
                     <td>@book.Title</td>
                     <td>@foreach (var item in book.BookAuthor)
                         {
@@ -68,7 +66,7 @@ else
                     <td>@book.Year.Year</td>
                     <td>@book.Stock</td>
                     <td>@book.Available</td>
-                    <td><a asp-action="Edit" class="btn btn-primary" asp-route-Id="@book.Id">Edit</a> <a asp-action="Delete" class="btn btn-danger ml-3" asp-route-Id="@book.Id">Delete</a></td>
+                    <td><a asp-action="Edit" class="btn btn-primary" asp-route-Id="@book.Id">Edit</a> <a asp-action="Delete" class="btn btn-danger ml-3" asp-route-Id="@book.Id">Delete</a> <a asp-action="Details" class="btn btn-warning" asp-route-Id="@book.Id">Details</a></td>
                 </tr>
             }
         </tbody>

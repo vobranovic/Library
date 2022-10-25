@@ -21,7 +21,7 @@ namespace Library.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var borrows = _dbContext.Borrows.ToList();
+            var borrows = _dbContext.Borrows.ToList().OrderByDescending(b => b.DateBorrowed);
             foreach (var borrow in borrows)
             {
                 if (_dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId) == null)
@@ -32,6 +32,8 @@ namespace Library.Areas.Admin.Controllers
                 {
                     borrow.UserName = _dbContext.Users.FirstOrDefault(b => b.Id == borrow.UserId).UserName;
                 }
+
+                borrow.BooksBorrowed = _dbContext.BookBorrow.Count(bb => bb.BorrowId == borrow.Id);
             }
             return View(borrows);
         }

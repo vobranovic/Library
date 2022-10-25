@@ -73,6 +73,31 @@ namespace Library.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var book = _dbContext.Books.Find(id);
+            ViewBag.Publishers = _dbContext.Publishers.ToList().Select(p => new SelectListItem() { Text = p.Name, Value = p.Id.ToString() });
+
+            var bookBorrows = _dbContext.BookBorrow.Where(bb => bb.BookId == book.Id);
+            List<Borrow> borrows = new List<Borrow>();
+
+            foreach (var bookBorrow in bookBorrows)
+            {
+                borrows.Add(_dbContext.Borrows.FirstOrDefault(b => b.Id == bookBorrow.BorrowId));
+            }
+
+            foreach (var borrow in borrows)
+            {
+                borrow.UserName = _dbContext.Users.FirstOrDefault(u => u.Id == borrow.UserId).UserName;
+            }
+            
+            ViewBag.Borrows = borrows;
+
+
+            return View(book);
+        }
+
+        [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Publishers = _dbContext.Publishers.ToList().Select(p => new SelectListItem() { Text = p.Name, Value = p.Id.ToString() });
