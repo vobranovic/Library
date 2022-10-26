@@ -1,5 +1,6 @@
 using Library.Data;
 using Library.Models;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,15 @@ else
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler(a => a.Run(async context =>
+{
+    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
+    var exception = exceptionHandlerPathFeature.Error;
+
+    await context.Response.WriteAsJsonAsync(new { error = exception.Message });
+}));
+
 app.UseStaticFiles();
 
 app.UseRouting();

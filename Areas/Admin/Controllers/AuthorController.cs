@@ -18,8 +18,16 @@ namespace Library.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            var authors = _dbContext.Authors.ToList();
-            return View(authors);
+            try
+            {
+                var authors = _dbContext.Authors.ToList();
+                return View(authors);
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+                return View();
+            }
         }
 
         [HttpGet]
@@ -31,20 +39,34 @@ namespace Library.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Author author)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _dbContext.Authors.Add(author);
-                _dbContext.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Authors.Add(author);
+                    _dbContext.SaveChanges();
 
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(author);
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(author);
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            if (_dbContext.Authors.Find(id) == null)
+            {
+                return RedirectToAction("PageNotFound", "HttpStatusCodes");
+            }
             var author = _dbContext.Authors.Find(id);
             return View(author);
         }
@@ -52,20 +74,34 @@ namespace Library.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(Author author)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _dbContext.Authors.Update(author);
-                _dbContext.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Authors.Update(author);
+                    _dbContext.SaveChanges();
 
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(author);
+                }
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(author);
         }
 
         [HttpGet]
         public IActionResult Delete(int id)
         {
+            if (_dbContext.Authors.Find(id) == null)
+            {
+                return RedirectToAction("PageNotFound", "HttpStatusCodes");
+            }
             var author = _dbContext.Authors.Find(id);
             return View(author);
         }
@@ -73,11 +109,23 @@ namespace Library.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ConfirmDelete(int id)
         {
-            var author = _dbContext.Authors.Find(id);
-            _dbContext.Authors.Remove(author);
-            _dbContext.SaveChanges();
+            if (_dbContext.Authors.Find(id) == null)
+            {
+                return RedirectToAction("PageNotFound", "HttpStatusCodes");
+            }
+            try
+            {
+                var author = _dbContext.Authors.Find(id);
+                _dbContext.Authors.Remove(author);
+                _dbContext.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                ViewBag.Error = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

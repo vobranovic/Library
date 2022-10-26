@@ -2,6 +2,7 @@
 using Library.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Security.Policy;
 using Publisher = Library.Models.Publisher;
@@ -34,15 +35,33 @@ namespace Library.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Create(Publisher publisher)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _dbContext.Publishers.Add(publisher);
-                _dbContext.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    _dbContext.Publishers.Add(publisher);
+                    _dbContext.SaveChanges();
 
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return View(publisher);
+                }
+            }
+            catch (DbUpdateException e)
+            {
+                if (e.InnerException.Message != null)
+                {
+                    TempData["Error"] = e.InnerException.Message;
+                }
+                else
+                {
+                    TempData["Error"] = e.Message;
+                }
+                
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(publisher);
         }
 
         [HttpGet]

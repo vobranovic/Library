@@ -1,10 +1,12 @@
 ﻿using Microsoft.Build.Framework;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using RequiredAttribute = System.ComponentModel.DataAnnotations.RequiredAttribute;
 
 namespace Library.Models
 {
+    [Index(nameof(Name), IsUnique = true)]
     public class Publisher
     {
         public int Id { get; set; }

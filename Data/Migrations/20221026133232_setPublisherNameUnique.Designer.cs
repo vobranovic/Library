@@ -4,6 +4,7 @@ using Library.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221026133232_setPublisherNameUnique")]
+    partial class setPublisherNameUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,7 +127,7 @@ namespace Library.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors", (string)null);
+                    b.ToTable("Authors");
                 });
 
             modelBuilder.Entity("Library.Models.Book", b =>
@@ -157,7 +159,7 @@ namespace Library.Data.Migrations
 
                     b.HasIndex("PublisherId");
 
-                    b.ToTable("Books", (string)null);
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("Library.Models.BookAuthor", b =>
@@ -180,7 +182,7 @@ namespace Library.Data.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("BookAuthor", (string)null);
+                    b.ToTable("BookAuthor");
                 });
 
             modelBuilder.Entity("Library.Models.BookBorrow", b =>
@@ -203,7 +205,7 @@ namespace Library.Data.Migrations
 
                     b.HasIndex("BorrowId");
 
-                    b.ToTable("BookBorrow", (string)null);
+                    b.ToTable("BookBorrow");
                 });
 
             modelBuilder.Entity("Library.Models.Borrow", b =>
@@ -229,7 +231,7 @@ namespace Library.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Borrows", (string)null);
+                    b.ToTable("Borrows");
                 });
 
             modelBuilder.Entity("Library.Models.Publisher", b =>
@@ -250,7 +252,7 @@ namespace Library.Data.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Publishers", (string)null);
+                    b.ToTable("Publishers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
