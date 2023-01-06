@@ -7,7 +7,14 @@
 
 <ul class="list-group">
     <li class="list-group-item"><b>Title:</b> @Model.Title </li>
-    <li class="list-group-item"><b>Author:</b> </li>
+    <li class="list-group-item">
+        <b>Authors:</b><br />
+        @foreach (var item in ViewBag.Authors)
+        {
+            @item.AuthorName
+            <br />
+        }
+    </li>
     <li class="list-group-item"><b>Year:</b> @Model.Year.Year </li>
 </ul>
 <br />

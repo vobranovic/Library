@@ -76,7 +76,7 @@ namespace Library.Areas.Admin.Controllers
         public IActionResult Details(int id)
         {
             var book = _dbContext.Books.Find(id);
-            ViewBag.Publishers = _dbContext.Publishers.ToList().Select(p => new SelectListItem() { Text = p.Name, Value = p.Id.ToString() });
+            //ViewBag.Publishers = _dbContext.Publishers.ToList().Select(p => new SelectListItem() { Text = p.Name, Value = p.Id.ToString() });
 
             var bookBorrows = _dbContext.BookBorrow.Where(bb => bb.BookId == book.Id);
             List<Borrow> borrows = new List<Borrow>();
@@ -90,8 +90,15 @@ namespace Library.Areas.Admin.Controllers
             {
                 borrow.UserName = _dbContext.Users.FirstOrDefault(u => u.Id == borrow.UserId).UserName;
             }
-            
             ViewBag.Borrows = borrows;
+
+            var bookAuthors = _dbContext.BookAuthor.Where(ba => ba.BookId == id).ToList();
+            foreach (var bookAuthor in bookAuthors)
+            {
+                bookAuthor.AuthorName = _dbContext.Authors.FirstOrDefault(a => a.Id == bookAuthor.AuthorId).FirstName + " " + _dbContext.Authors.FirstOrDefault(a => a.Id == bookAuthor.AuthorId).LastName;
+
+            }
+            ViewBag.Authors = bookAuthors;
 
 
             return View(book);
